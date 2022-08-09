@@ -1,0 +1,43 @@
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+      @content;
+  }
+  @-moz-keyframes #{$animationName} {
+      @content;
+  }
+  @-o-keyframes #{$animationName} {
+      @content;
+  }
+  @keyframes #{$animationName} {
+      @content;
+  }
+}
+@include keyframes(blinkBedgeAnt) {
+  0%   { 
+    opacity: 0.8;
+  }
+  100% { 
+    opacity: 1;
+  }
+}
+.blink-bedge-ant-code {
+  animation: blinkBedgeAnt 1s infinite alternate;
+  
+}
+
+.product-collection-export-view-icon {
+  position: absolute;
+  right: 16px;
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: #111;
+  svg {
+    width: 0;
+    height: 0;
+  }
+  &:hover {
+    color: #01C08A;
+  }
+}

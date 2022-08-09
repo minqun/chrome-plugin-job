@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "priority": 11,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        { "header": "x-frame-options", "operation": "remove" },
+        { "header": "frame-options", "operation": "remove" },
+        { "header": "h3", "operation": "append", "value": "v3" }
+      ],
+      "requestHeaders": [
+        {
+          "header": "sec-ch-ua-mobile",
+          "operation": "set",
+          "value": "?0"
+        },
+        { "header": "sec-fetch-dest", "operation": "set", "value": "document" }
+      ]
+    },
+    "condition": {
+      "urlFilter": "https://www.facebook.com/ads/library/*",
+      "resourceTypes": ["sub_frame"]
+    }
+  }
+]

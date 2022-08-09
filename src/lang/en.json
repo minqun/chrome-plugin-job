@@ -1,0 +1,9 @@
+{
+
+  "home": {
+    "title": "易境派爬虫-爬取当前商品",
+    "collection": "采集该产品",
+    "collecting": "采集中",
+    "down": "导出结果"
+  }
+}

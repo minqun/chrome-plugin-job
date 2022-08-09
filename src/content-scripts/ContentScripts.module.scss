@@ -1,0 +1,26 @@
+
+$border: 1px solid #6f7072;
+$priColor: #ffd612;
+.yjp-repire-box {
+  background: #fff;
+  border-radius: 4px;
+  display: flex;
+  box-shadow: 1px 3px 6px 0 rgb(0 0 0 / 8%);
+  padding: 10px 10px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  .logo {
+    width:114px;
+    height: 27px;
+  }
+  .c-btn {
+    margin-top: 8px;
+    width: 100%;
+  }
+}
+
+
+
+
+
