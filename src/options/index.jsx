@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-21 14:26:42
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-10 15:16:17
+ * @LastEditTime: 2022-08-10 22:21:39
  * @FilePath: /erp-plugin/src/options/index.jsx
  */
 
@@ -44,12 +44,14 @@ if (window.location.href.includes('szyijingpai.com/verify')) {
       }
     })
     if (!Cookie.get('saasToken')) {
-      window.location.href = '/'
+      window.location.href = '/orgLogin'
     }
 } else if (window.location.href.includes('szyijingpai.com')) {
   get('token-info').then(data => {
     console.log(!data ||  (data && data.token != Cookie.get('saasToken')), '是否不同步')
-    if (!data ||  (data && data.token != Cookie.get('saasToken'))) {
+    if (!data) {
+      window.location.href = '/verify'
+    } else if (!data ||  (data && data.token != Cookie.get('saasToken'))) {
       set('token-info', {
         token: Cookie.get('saasToken'),
         username: Cookie.get('userName')

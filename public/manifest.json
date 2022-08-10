@@ -9,7 +9,6 @@
    ],
    "host_permissions": [
       "https://*/",
-      "http://120.76.240.88:8031",
       "<all_urls>"
    ],
    "version": "0.0.0.1",
