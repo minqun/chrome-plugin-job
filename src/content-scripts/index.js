@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-04-12 14:30:02
- * @LastEditTime: 2022-08-10 14:44:31
+ * @LastEditTime: 2022-08-10 21:35:28
  * @LastEditors: M.re c1029mq@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /erp-plugin/src/content-scripts/index.js
@@ -89,7 +89,11 @@ const vi = [
   'pages.lazada.com.my',
   'www.lazada.co.id',
   'pages.lazada.co.id',
-  'szyijingpai.com'
+  'szyijingpai.com',
+  'item.taobao.com',
+  'taobao.com',
+  '1688.com',
+  'detail.1688.com',
 ]
 let host  = window.location.host
 

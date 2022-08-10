@@ -2,7 +2,7 @@
  * @Author: M.re c1029mq@qq.com
  * @Date: 2022-05-11 11:08:23
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-10 15:05:56
+ * @LastEditTime: 2022-08-10 21:23:05
  * @LastEditors: M.re c1029mq@qq.com
  * @LastEditTime: 2022-06-16 16:10:12
  * @FilePath: /erp-plugin/src/content-scripts/Home.jsx
@@ -24,11 +24,12 @@ import * as XLSX from 'xlsx'
 import { postSave } from '@/api/home.js'
 import Styles from '@/content-scripts/ContentScripts.module.scss'
 let checked = true
+let hash = window.location.href
 function Home(props) {
   const [store, dispatch] = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [exportLoading, setExportLoading] = useState(false)
-
+  const [url, setUrl] = useState(undefined)
   const [platform, getPlatform] = useState(null)
   const [noProduct, getNoProduct] = useState(false)
   const [productData, setProductData] = useState(null)
@@ -63,10 +64,23 @@ function Home(props) {
     let platformIs = patPlatform()
     if (/xiapibuy|shopee/.test(platformIs)) {
       platformIs = 'shopee'
+     
     }
     getPlatform(platformIs)
-    let checkedVerify = checkProduct(platformIs)
-    getNoProduct(checkedVerify)
+    console.log('platformIs--------', platformIs)
+    if (platformIs == 'shopee') {
+      getNoProduct(checkProduct(platformIs))
+      const tim = setInterval(()=>{
+          if(window.location.href != hash) {
+            hash = window.location.href
+            getNoProduct(checkProduct(platformIs))
+          }
+        },1000);
+    } else {
+      let checkedVerify = checkProduct(platformIs)
+      console.log('checkProduct', checkedVerify)
+      getNoProduct(checkedVerify)
+    }
   }, [])
   useEffect(async () => {
     if (platform) {
@@ -77,6 +91,12 @@ function Home(props) {
   }, [productData])
 
   const handleCollection = async () => {
+    // TODO 限制
+    let limit = await get('limit')
+    limit = (limit || 100) - 1
+    await set('limit', limit)
+    console.log('limit', limit)
+    if (limit <= 0) return 
     setLoading(true)
     setProductData(productDataCreate(platform))
     setLoading(false)
@@ -103,7 +123,6 @@ function Home(props) {
     contentClient
       .sendMessage(new ChromeMessage('connect-post', { data: productData, token: store.loginInfo?.token }))
       .then(res => {
-        console.log('结果，', res)
         if (res && res.status == '500') {
           setErrorData(res.message)
         }else if (res && res.code == 0) {

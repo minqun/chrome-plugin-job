@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-04-15 09:51:02
- * @LastEditTime: 2022-08-10 13:24:53
+ * @LastEditTime: 2022-08-10 21:15:43
  * @LastEditors: M.re c1029mq@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /erp-plugin/src/lib/index.js
@@ -470,14 +470,15 @@ export const defData  = (data) => {
   
 }
 export const checkProduct  = (platform) => {
-  const content = document.documentElement.innerHTML
   let href = window.location.href
   if (['taobao'].includes(platform)) {
-    return content.includes('envMode :product')
-  } else if (['jumia', 'lazada', 'aliexpress'].includes(platform)) {
-    return /-\w{8,9}.html/.test(href) || /\/[0-9]{11}.html/.test(href) || /\/s[0-9]{11}.html/.test(href)
+    return window.location.href.includes('/item') && window.location.search.includes('id=')
+  }else if (['1688'].includes(platform)) {
+    return /\/\w{12,13}.html/.test(href) || /\/offer\//.test(href)
+  }  else if (['jumia', 'lazada', 'aliexpress'].includes(platform)) {
+    return /-\w{8,9}.html/.test(href) || /\/[0-9]{11}.html/.test(href) || /\/s[0-9]{11}.html/.test(href) || /\/[0-9]{14,16}.html/.test(href) || /\/products\/.*/.test(href) 
   }else if (['shopee'].includes(platform)) {
-    return window.location.search && window.location.search.includes('sp_atk=') || window.location.pathname.includes('product')
+    return window.location.search && window.location.search.includes('sp_atk=') || window.location.pathname.includes('product') || $(".page-product")
   }
 
 }
