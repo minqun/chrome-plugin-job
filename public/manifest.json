@@ -3,7 +3,9 @@
    "name": "ejp-reptile",
    "permissions": [
       "storage",
-      "background"
+      "background",
+      "activeTab",
+      "tabs"
    ],
    "host_permissions": [
       "https://*/",
@@ -38,7 +40,15 @@
       }
    },
    "content_scripts": [
-  
+      {
+         "matches": [
+            "<all_urls>"
+         ],
+         "js": [
+            "js/options.js"
+         ],
+         "run_at": "document_end"
+      },
       {
          "matches": [
             "<all_urls>"

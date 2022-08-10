@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-08 09:52:38
+ * @LastEditTime: 2022-08-10 14:08:20
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
@@ -21,7 +21,7 @@ export const analyzePageFn  = (platform) => {
 }
 export const productDataCreate = (platform) => {
   let product = {
-    "comments": '',
+    // "comments": '',
     "detailDescription": '',
     "pictureUrlList": '',
     "price": '',
@@ -33,9 +33,9 @@ export const productDataCreate = (platform) => {
   if (['taobao'].includes(platform)) {
     
   } else if (['jumia'].includes(platform)) {
-    let info = $('script[type*="application/ld+json"]').text();
-    if (info) {
-      info = JSON.parse(info)
+    let prd = $('script[type*="application/ld+json"]').text();
+    if (prd) {
+      prd = JSON.parse(prd)
       product.title = prd?.mainEntity?.name
       product.url = window.location.href
       product.pictureUrlList = prd?.mainEntity?.image?.contentUrl
@@ -44,7 +44,7 @@ export const productDataCreate = (platform) => {
       product.productSourceCode = platform
       product.detailDescription = $('div[class*="markup -mhm -pvl -oxa -sc"]').html(); 
       product.simpleDescription = $("div[class*='row -pas']").html()
-      product.comments = ''
+      // product.comments = ''
     }
   } else if (['lazada'].includes(platform)) {
    

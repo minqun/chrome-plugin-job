@@ -1,22 +1,63 @@
 
 $border: 1px solid #6f7072;
 $priColor: #ffd612;
+.yjp-repire-box-content {
+  position:relative;
+  width: 270px;
+}
+.tip-error {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
+}
 .yjp-repire-box {
   background: #fff;
   border-radius: 4px;
+  margin-top: 8px;
   display: flex;
-  box-shadow: 1px 3px 6px 0 rgb(0 0 0 / 8%);
+  box-shadow: 0px 0px 6px 0 rgb(0 0 0 / 8%);
   padding: 10px 10px;
+  width: 270px;
   align-items: center;
-  flex-direction: column;
   justify-content: center;
   .logo {
     width:114px;
     height: 27px;
   }
-  .c-btn {
-    margin-top: 8px;
+  .cell-space {
+    display: flex;
     width: 100%;
+    font-size: 13px;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .title-line-width {
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 70px;
+    text-overflow: ellipsis;
+  }
+  .yjp-repire-bwt {
+    display: flex;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 20px;
+    margin-top: 10px;
+  }
+  .c-btn {
+    width: 120px;
+    margin-bottom: 6px;
+  }
+  .c-i-btn {
+    flex: 1;
+  
+  }
+  .yjp-repire-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    &-cell {
+      display: flex;
+    }
   }
 }
 

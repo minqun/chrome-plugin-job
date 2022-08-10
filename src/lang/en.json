@@ -1,9 +1,13 @@
 {
 
   "home": {
+    "user": "用户",
     "title": "易境派爬虫-爬取当前商品",
     "collection": "采集该产品",
     "collecting": "采集中",
-    "down": "导出结果"
+    "down": "导出结果",
+    "upload": "上传到系统",
+    "error": "错误信息",
+    "login": "前往登录"
   }
 }

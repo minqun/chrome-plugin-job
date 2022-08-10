@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-04-12 14:30:02
- * @LastEditTime: 2022-08-07 11:05:26
+ * @LastEditTime: 2022-08-10 14:44:31
  * @LastEditors: M.re c1029mq@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /erp-plugin/src/content-scripts/index.js
@@ -11,8 +11,7 @@ import { get, set, getUrl, contentClient, ChromeMessage } from '@/chrome'
 import config from '@/config/index.js'
 import $ from 'jquery'
 const packageConfig = require('../../package.json')
-import { appDom, _local ,patPlatform, checkProduct} from '@/lib'
-import mixpanel from 'mixpanel-browser'
+import { appDom, _local } from '@/lib'
 const uuid = require('node-uuid')
 
 class CreateElDom {
@@ -21,7 +20,7 @@ class CreateElDom {
     dom.id = appDom;
     dom.className = 'notranslate'
     dom.style =
-      'position: fixed;bottom:152px;height: 0px;width: auto;right: 60px; z-index:2147483899; ';
+      'position: fixed;bottom:200px;height: 0px;width: auto;right: 40px; z-index:2147483899; ';
     document.documentElement.appendChild (dom);
   }
   injectCustomJs(jsPath) {
@@ -89,11 +88,11 @@ const vi = [
   'www.lazada.com.my',
   'pages.lazada.com.my',
   'www.lazada.co.id',
-  'pages.lazada.co.id'
-
+  'pages.lazada.co.id',
+  'szyijingpai.com'
 ]
-let timer = null
 let host  = window.location.host
+
 if (vi.includes(host)) {  
     const App = new CreateElDom()
     App.injectCustomJs()
