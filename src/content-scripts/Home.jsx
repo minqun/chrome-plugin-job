@@ -2,7 +2,7 @@
  * @Author: M.re c1029mq@qq.com
  * @Date: 2022-05-11 11:08:23
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-10 21:23:05
+ * @LastEditTime: 2022-08-10 22:36:41
  * @LastEditors: M.re c1029mq@qq.com
  * @LastEditTime: 2022-06-16 16:10:12
  * @FilePath: /erp-plugin/src/content-scripts/Home.jsx
@@ -164,7 +164,7 @@ function Home(props) {
               <span style={{ marginRight: '4px' }}> {lang.home.user}： </span>
               <span className={Styles['title-line-width']} title={store.loginInfo?.username}>
                 {' '}
-                {store.loginInfo?.username}
+                {store.loginInfo?.username ? store.loginInfo?.username : <a href={config.href}>{lang.home.login}</a>}
               </span>
             </div>
           </div>
