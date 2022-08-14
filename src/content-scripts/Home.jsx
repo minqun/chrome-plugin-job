@@ -2,7 +2,7 @@
  * @Author: M.re c1029mq@qq.com
  * @Date: 2022-05-11 11:08:23
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-10 22:36:41
+ * @LastEditTime: 2022-08-14 22:19:32
  * @LastEditors: M.re c1029mq@qq.com
  * @LastEditTime: 2022-06-16 16:10:12
  * @FilePath: /erp-plugin/src/content-scripts/Home.jsx
@@ -28,6 +28,7 @@ let hash = window.location.href
 function Home(props) {
   const [store, dispatch] = useContext(AppContext)
   const [loading, setLoading] = useState(false)
+  const [ready, setReady] = useState(false)
   const [exportLoading, setExportLoading] = useState(false)
   const [url, setUrl] = useState(undefined)
   const [platform, getPlatform] = useState(null)
@@ -36,9 +37,9 @@ function Home(props) {
   const [data, setData] = useState({})
   const [errorData, setErrorData] = useState(undefined)
   const [successData, setSuccessData] = useState(undefined)
-  
+  let count = 1;
   const lang = langData[store.lang]
-  useEffect(() => {
+  useEffect(async () => {
     get('token-info').then(updateInfo => {
       dispatch({
         type: 'update',
@@ -60,24 +61,34 @@ function Home(props) {
           setErrorData(false)
         })
       }
-    }, 2000)
+      if((document.readyState == 'interactive' || document.readyState == 'complete') && count) {
+        count = 0
+        setReady(true)
+      } 
+    }, 1000)
     let platformIs = patPlatform()
     if (/xiapibuy|shopee/.test(platformIs)) {
       platformIs = 'shopee'
-     
+    }
+    if (/tmall|taobao/.test(platformIs)) {
+      platformIs = 'taobao'
     }
     getPlatform(platformIs)
     console.log('platformIs--------', platformIs)
     if (platformIs == 'shopee') {
-      getNoProduct(checkProduct(platformIs))
-      const tim = setInterval(()=>{
+      let check = await checkProduct(platformIs)
+      getNoProduct(check)
+      const tim = setInterval(async ()=>{
           if(window.location.href != hash) {
+            count = 1
+            setProductData(null)
             hash = window.location.href
-            getNoProduct(checkProduct(platformIs))
+           check = await checkProduct(platformIs)
+            getNoProduct(check)
           }
         },1000);
     } else {
-      let checkedVerify = checkProduct(platformIs)
+      let checkedVerify = await checkProduct(platformIs)
       console.log('checkProduct', checkedVerify)
       getNoProduct(checkedVerify)
     }
@@ -92,14 +103,26 @@ function Home(props) {
 
   const handleCollection = async () => {
     // TODO 限制
-    let limit = await get('limit')
-    limit = (limit || 100) - 1
-    await set('limit', limit)
-    console.log('limit', limit)
-    if (limit <= 0) return 
+    // let limit = await get('limit')
+    // limit = (limit || 100) - 1
+    // await set('limit', limit)
+    // console.log('limit', limit)
+    // if (limit <= 0) return 
     setLoading(true)
-    setProductData(productDataCreate(platform))
-    setLoading(false)
+    // contentClient
+    // .sendMessage(new ChromeMessage('test', { data: productData, token: store.loginInfo?.token }))
+    // .then(res => {
+    //   console.log('采集到html 处理')
+    //   console.log($(res))
+    // })
+    setTimeout(() => {
+      productDataCreate(platform, (product)=> {
+        setProductData(product)
+        setLoading(false)
+      })
+    }, 1000);
+   
+    
   }
   const collectionExportHandle = () => {
     // shopify 导出模板处理
@@ -170,15 +193,15 @@ function Home(props) {
           </div>
           <div className={Styles['yjp-repire-btn-wrap']}>
             <Button
-              disabled={!noProduct}
-              onClick={productData?.url ? collectionUpload : handleCollection}
+              disabled={!noProduct }
+              onClick={productData?.url ? collectionUpload : ready ? handleCollection : () => {}}
               className={`${Styles['c-btn']}`}
               type="primary"
               loading={loading}
             >
-              {productData?.url ? lang.home.upload : loading ? lang.home.collecting : lang.home.collection}
+              {productData?.url ? lang.home.upload : loading ? lang.home.collecting : ready ? lang.home.collection: lang.home.ready_wait}
             </Button>
-            <div className={Styles['yjp-repire-btn-wrap-cell']}>
+            {/* <div className={Styles['yjp-repire-btn-wrap-cell']}>
               <Button
                 disabled={!productData?.url}
                 onClick={collectionExportHandle}
@@ -188,7 +211,7 @@ function Home(props) {
               >
                 {lang.home.down}
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
