@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-13 18:57:32
+ * @LastEditTime: 2022-08-17 09:38:52
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
@@ -77,7 +77,14 @@ export const productDataCreate = async (platform, callback) => {
 
       console.log(html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', ''))
       product.detailDescription = html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', '');
-      product.simpleDescription = $("div[class*='row -pas']").html()
+      let str = 
+      $("article[class*='row -pas']").children().map((key,item) => {
+        if (key == 1) {
+        }else {
+          str += $(item).html()
+        }
+      })
+      product.simpleDescription = str
       callback(product)
     }
   } else if (['lazada'].includes(platform)) {
