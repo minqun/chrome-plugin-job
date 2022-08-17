@@ -2,7 +2,7 @@
  * @Author: M.re c1029mq@qq.com
  * @Date: 2022-05-11 11:08:23
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-14 22:19:32
+ * @LastEditTime: 2022-08-17 16:15:24
  * @LastEditors: M.re c1029mq@qq.com
  * @LastEditTime: 2022-06-16 16:10:12
  * @FilePath: /erp-plugin/src/content-scripts/Home.jsx
@@ -94,6 +94,7 @@ function Home(props) {
     }
   }, [])
   useEffect(async () => {
+    console.log('没刷新什么毛笔')
     if (platform) {
     }
   }, [platform])
@@ -119,6 +120,7 @@ function Home(props) {
       productDataCreate(platform, (product)=> {
         setProductData(product)
         setLoading(false)
+        collectionUpload(product)
       })
     }, 1000);
    
@@ -140,11 +142,11 @@ function Home(props) {
     a.click()
     document.body.removeChild(a)
   }
-  const collectionUpload = () => {
+  const collectionUpload = (product) => {
     setLoading(true)
     // 上传到系统
     contentClient
-      .sendMessage(new ChromeMessage('connect-post', { data: productData, token: store.loginInfo?.token }))
+      .sendMessage(new ChromeMessage('connect-post', { data: product, token: store.loginInfo?.token }))
       .then(res => {
         if (res && res.status == '500') {
           setErrorData(res.message)
@@ -194,12 +196,13 @@ function Home(props) {
           <div className={Styles['yjp-repire-btn-wrap']}>
             <Button
               disabled={!noProduct }
-              onClick={productData?.url ? collectionUpload : ready ? handleCollection : () => {}}
+              onClick={ready ? handleCollection : () => {}}
               className={`${Styles['c-btn']}`}
               type="primary"
               loading={loading}
             >
-              {productData?.url ? lang.home.upload : loading ? lang.home.collecting : ready ? lang.home.collection: lang.home.ready_wait}
+              {/* {productData?.url ? lang.home.upload : loading ? lang.home.collecting : ready ? lang.home.collection: lang.home.ready_wait} */}
+              {loading ? lang.home.collecting : ready ? lang.home.collection: lang.home.ready_wait}
             </Button>
             {/* <div className={Styles['yjp-repire-btn-wrap-cell']}>
               <Button

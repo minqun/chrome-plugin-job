@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-17 09:38:52
+ * @LastEditTime: 2022-08-17 16:48:34
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
@@ -45,7 +45,6 @@ export const productDataCreate = async (platform, callback) => {
       } else {
         detail += $(item).html()
       }
-      
     })
    
     product.title = $('title').html()
@@ -77,9 +76,9 @@ export const productDataCreate = async (platform, callback) => {
 
       console.log(html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', ''))
       product.detailDescription = html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', '');
-      let str = 
-      $("article[class*='row -pas']").children().map((key,item) => {
-        if (key == 1) {
+      let str = ''
+      $("div[class*='row -pas']").children().map((key,item) => {
+        if (/What’s in the box/ig.test($(item).text())) {
         }else {
           str += $(item).html()
         }
