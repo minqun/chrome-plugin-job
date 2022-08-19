@@ -1,13 +1,13 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-17 16:48:34
+ * @LastEditTime: 2022-08-19 22:00:13
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
+import { contentClient, ChromeMessage } from '@/chrome'
+
 export const productDataCreate = async (platform, callback) => {
-
-
   let product = {
     // "comments": '',
     "detailDescription": '',
@@ -108,37 +108,97 @@ export const productDataCreate = async (platform, callback) => {
       
     }
   } else if (['aliexpress'].includes(platform)) {
-    let prd = $('script[type*="application/ld+json"]').text();
-    let imgList = []
-    $('.images-view-list').find('img').map((key, item) => {
-      imgList.push(item.src.replace('_50x50', '_Q90'))
-    })
-    
-    let prdArr = JSON.parse(prd)
-    if (prd && prdArr && prdArr.length) {
-      prd = prdArr.find(item => item['@type'] == 'Product')
-      product.title = prd?.name
-      product.url = prd?.offers?.url
-      product.pictureUrlList = imgList.length && imgList || prd?.image
-      product.price = prd?.offers?.price
-      product.priceUnit = prd?.offers?.priceCurrency
-      product.productSourceCode = platform
-      product.detailDescription = $('div[class*="product-overview"]').html(); 
-      let simpleDescription = await new Promise((resolve)=>{
-        let str = '';
-        $('.detail-tab-bar li[ae_button_type=tab_specs]').click()
-        let sttim = setInterval(()=>{
-          if ($('.product-detail-tab .product-specs').html()) {
-            str = $('.product-detail-tab .product-specs').html()
-            clearInterval(sttim)
-            resolve(str)
-          }
-        }, 1000)
+    if (window.location.host == 'm.aliexpress.com') {
+      let prd = $('script[type*="application/ld+json"]').text();
+      let prdArr = JSON.parse(prd)
+      if (prd && prdArr && prdArr.length) {
+          prd = prdArr.find(item => item['@type'] == 'Product')
+          product.title = prd?.name
+          product.url = prd?.offers?.url
+          product.pictureUrlList = prd?.image
+          product.price = prd?.offers?.price.replace(/[^\d|\.|,]/g,'' )
+          product.priceUnit = prd?.offers?.priceCurrency
+          product.productSourceCode = platform
+      }
+      const fdmm = () => {
+        return new Promise((resolve, reject)=>{
+          let str = '';
+          let length = 20
+          $('div[ae_button_type="new_specifications_viewmore_click"]').click()
+
+          let sttim = setInterval(()=>{
+            if ($('.comet-drawer-body').html()) {
+              str =$('.comet-drawer-body').html()
+              $('.comet-icon-close').click()
+              clearInterval(sttim)
+              resolve(str)
+            } 
+          
+          }, 1000)
+        })
+      }
+      product.simpleDescription = await fdmm()
+      let link = $('iframe[class*="overview--iframe-"]').attr('src')
+      console.log('link....', link)
+      contentClient
+      .sendMessage(new ChromeMessage('connect-link', { data: link }))
+      .then(res => {
+        console.log(res, '-----html')
+        product.detailDescription = res
+
+        callback(product)
       })
-      
-      product.simpleDescription = simpleDescription
-      callback(product)
+
+    } else {
+      let prd = $('script[type*="application/ld+json"]').text();
+      let imgList = []
+      $('.images-view-list').find('img').map((key, item) => {
+        imgList.push(item.src.replace('_50x50', '_Q90'))
+      })
+        let prdArr = JSON.parse(prd)
+        if (prd && prdArr && prdArr.length) {
+          prd = prdArr.find(item => item['@type'] == 'Product')
+          product.title = prd?.name
+          product.url = prd?.offers?.url
+          product.pictureUrlList = imgList.length && imgList || prd?.image
+          product.price = prd?.offers?.price
+          product.priceUnit = prd?.offers?.priceCurrency
+          product.productSourceCode = platform
+          const fdm = () => {
+            return new Promise((resolve)=>{
+              let str = '';
+              $('.detail-tab-bar li[ae_button_type=tab_specs]').click()
+              let sttim = setInterval(()=>{
+                if ($('.product-detail-tab .product-specs').html()) {
+                  str = $('.product-detail-tab .product-specs').html()
+                  clearInterval(sttim)
+                  resolve(str)
+                }
+              }, 1000)
+            })
+          }
+          const fdd = () => {
+            return new Promise((resolve,reject)=>{
+              let str = '';
+          
+              let sttim = setInterval(()=>{
+                console.log($('div[class*="product-overview"]').children())
+                if ($('div[class*="product-overview"]').children().length) {
+                  str = $('div[class*="product-overview"]').html()
+                  clearInterval(sttim)
+                  resolve(str)
+                }
+              }, 1000)
+            })
+          }
+          let simpleDescription = await fdm()
+          product.detailDescription = await fdd()
+          console.log(simpleDescription, 'simpleDescription')
+          product.simpleDescription = simpleDescription
+          callback(product)
+        }
     }
+  
   } else if (['shopee'].includes(platform)) {
     let prd = {}
     $('script[type*="application/ld+json"]').map((key, item)=>{

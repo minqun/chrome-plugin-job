@@ -2,7 +2,7 @@
  * @Author: M.re c1029mq@qq.com
  * @Date: 2022-05-11 11:08:23
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-17 16:15:24
+ * @LastEditTime: 2022-08-19 20:11:05
  * @LastEditors: M.re c1029mq@qq.com
  * @LastEditTime: 2022-06-16 16:10:12
  * @FilePath: /erp-plugin/src/content-scripts/Home.jsx
@@ -118,6 +118,7 @@ function Home(props) {
     // })
     setTimeout(() => {
       productDataCreate(platform, (product)=> {
+        console.log(product, 'product------------')
         setProductData(product)
         setLoading(false)
         collectionUpload(product)

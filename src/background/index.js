@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-04-12 14:30:02
- * @LastEditTime: 2022-08-13 11:09:18
+ * @LastEditTime: 2022-08-19 20:09:56
  * @LastEditors: M.re c1029mq@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /erp-plugin/src/background/index.js
@@ -37,13 +37,12 @@ contentClient.listen('connect-post', (data, sendResponse) => {
       })
   }
 })
-contentClient.listen('test', (data, sendResponse) => {
+contentClient.listen('connect-link', (data, sendResponse) => {
   console.log('data', data)
-  if (data.msg == 'test') {
-    fetch('https://www.aliexpress.com/item/3256803807045749.html').then((res)=>res.text()).then(res=>{
+  if (data.msg == 'connect-link') {
+    fetch(data.params.data).then((res)=>res.text()).then(res=>{
       sendResponse(res)
     })
-    sendResponse('ok')
   }
 })
 contentClient.listen('update-token', (data, sendResponse) => {
