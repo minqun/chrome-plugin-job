@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-04-12 14:30:02
- * @LastEditTime: 2022-08-17 23:09:28
+ * @LastEditTime: 2022-08-20 16:43:00
  * @LastEditors: M.re c1029mq@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /erp-plugin/src/content-scripts/index.js
@@ -10,10 +10,7 @@ import Plugin from './ContentScripts.jsx'
 import { get, set, getUrl, contentClient, ChromeMessage } from '@/chrome'
 import config from '@/config/index.js'
 import $ from 'jquery'
-const packageConfig = require('../../package.json')
 import { appDom, _local } from '@/lib'
-const uuid = require('node-uuid')
-
 class CreateElDom {
   constructor () {
     const dom = document.createElement ('div');
@@ -49,7 +46,19 @@ const vi = [
   'th.xiapibuy.com',
   'www.jumia.com.ng',
   'www.jumia.co.ke',
-  
+  'www.jumia.com.eg',
+  'br.xiapibuy.com',
+  'mx.xiapibuy.com',
+  'plaza.aliexpress.com',
+  'm.aliexpress.com',
+  'www.lazada.vn',
+  'pages.lazada.vn',
+  'www.lazada.co.th',
+  'pages.lazada.co.th',
+  'www.lazada.co.th',
+  'www.lazada.sg',
+  'pages.lazada.sg',
+  // ---
   'shopee.cl',
   'shopee.com.co',
   'shopee.com.my',
@@ -60,34 +69,26 @@ const vi = [
   'shopee.vn',
   'shopee.com.br',
   'shopee.com.mx',
-  
+
   'ph.xiapibuy.com',
   'sg.xiapibuy.com',
   'vn.xiapibuy.com',
-  'br.xiapibuy.com',
-  'mx.xiapibuy.com',
+  
   'co.xiapibuy.com',
   'cl.xiapibuy.com',
   'www.jumia.ci',
   'www.jumia.ma',
   
-  'www.jumia.com.eg',
-  'www.jumia.com.gh',
+  // 'www.jumia.com.gh',
   'www.jumia.sn',
   'www.jumia.ug',
   'aliexpress.ru',
   'campaign.aliexpress.com',
   'promotion.aliexpress.ru',
   'www.aliexpress.com',
-  'plaza.aliexpress.com',
-  'm.aliexpress.com',
-  'www.lazada.vn',
-  'pages.lazada.vn',
-  'www.lazada.co.th',
-  'pages.lazada.co.th',
-  'www.lazada.co.th',
-  'www.lazada.sg',
-  'pages.lazada.sg',
+  
+ 
+ 
   'www.lazada.com.ph',
   'pages.lazada.com.ph',
   'www.lazada.com.my',
@@ -99,6 +100,7 @@ const vi = [
   'taobao.com',
   'tmall.com',
   '1688.com',
+  'www.1688.com',
   'detail.1688.com',
 ]
 let host  = window.location.host
