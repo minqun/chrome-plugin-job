@@ -1,13 +1,13 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-19 22:00:13
+ * @LastEditTime: 2022-08-29 22:31:30
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
 import { contentClient, ChromeMessage } from '@/chrome'
 
-export const productDataCreate = async (platform, callback) => {
+export const productDataCreate = async (platform, callback, target) => {
   let product = {
     // "comments": '',
     "detailDescription": '',
@@ -33,13 +33,18 @@ export const productDataCreate = async (platform, callback) => {
     product.simpleDescription = $('#attributes').html()
     callback(product)
   }  else if (['1688'].includes(platform)) {
+
+
+
+
+    
     let imgList = []
-    $('.img-list-wrapper').find('img').map((key, item) => {
+    $(`${target||''} .img-list-wrapper`).find('img').map((key, item) => {
       imgList.push(item.src)
     })
     let str = ''
     let detail = ''
-    $('.od-pc-attribute').parent().children().map((key,item) => {
+    $(`${target||''} .od-pc-attribute`).parent().children().map((key,item) => {
       if (key < 1) {
         str += $(item).html()
       } else {
@@ -47,7 +52,7 @@ export const productDataCreate = async (platform, callback) => {
       }
     })
    
-    product.title = $('title').html()
+    product.title = $(`${target||''} title`).html()
     product.url = window.location.href
     product.pictureUrlList = imgList.length && imgList || []
     product.price =  $('.price-text').eq(0).html()
@@ -76,13 +81,7 @@ export const productDataCreate = async (platform, callback) => {
 
       console.log(html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', ''))
       product.detailDescription = html.replace(/<strong.{0,}?>((.)+?<\/strong>)/g, '$1').replace('<\/strong>', '');
-      let str = ''
-      $("div[class*='row -pas']").children().map((key,item) => {
-        if (/What’s in the box/ig.test($(item).text())) {
-        }else {
-          str += $(item).html()
-        }
-      })
+      let str = document.querySelector('.markup.-pam').innerHTML
       product.simpleDescription = str
       callback(product)
     }
