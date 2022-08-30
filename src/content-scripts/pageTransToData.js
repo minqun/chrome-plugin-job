@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-08-07 14:42:51
  * @LastEditors: M.re c1029mq@qq.com
- * @LastEditTime: 2022-08-29 22:31:30
+ * @LastEditTime: 2022-08-30 20:55:02
  * @FilePath: /erp-plugin/src/content-scripts/pageTransToData.js
  */
 import $ from 'jquery'
@@ -34,24 +34,19 @@ export const productDataCreate = async (platform, callback, target) => {
     callback(product)
   }  else if (['1688'].includes(platform)) {
 
-
-
-
-    
     let imgList = []
     $(`${target||''} .img-list-wrapper`).find('img').map((key, item) => {
       imgList.push(item.src)
     })
     let str = ''
+    str += $('.od-pc-offer-cross').html()
+    str += $('.od-pc-attribute').html()
     let detail = ''
-    $(`${target||''} .od-pc-attribute`).parent().children().map((key,item) => {
-      if (key < 1) {
-        str += $(item).html()
-      } else {
-        detail += $(item).html()
-      }
+    $(`${target||''} .od-pc-detail-description`).find('img').map((key,item) => {
+      let src = $(item).attr('data-lazyload-src')
+      $(item).attr('src', src)
     })
-   
+    detail +=  $(`${target||''} .od-pc-detail-description`).html()
     product.title = $(`${target||''} title`).html()
     product.url = window.location.href
     product.pictureUrlList = imgList.length && imgList || []
